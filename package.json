@@ -13,7 +13,8 @@
     "lottie-ios": "^3.4.0",
     "lottie-react-native": "^5.1.5",
     "react": "18.2.0",
-    "react-native": "0.71.3"
+    "react-native": "0.71.3",
+    "react-native-audio-recorder-player": "^3.5.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

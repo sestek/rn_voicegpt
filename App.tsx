@@ -6,30 +6,16 @@ import {
   Text,
   TouchableOpacity,
   useColorScheme,
+  View,
 } from 'react-native';
 
 import {
   Colors,
 } from 'react-native/Libraries/NewAppScreen';
+import { RecordButton } from './src/components/recordButton';
 
-import Lottie from 'lottie-react-native';
 
 function App(): JSX.Element {
-
-  const [record, setRecord] = useState<boolean>(false);
-  const triggerRecord = () => setRecord(old => !old);
-  useEffect(() => {
-    if (lottieRef?.current) {
-      if (record) {
-        lottieRef.current.play();
-      }
-      else{
-        lottieRef.current.reset();
-      }
-    }
-  }, [record]);
-
-  const lottieRef = useRef<Lottie>(null);
 
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -38,20 +24,15 @@ function App(): JSX.Element {
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
+    <SafeAreaView style={{ ...backgroundStyle, backgroundColor: 'yellow', flex: 1 }}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
       <Text>test</Text>
-      <TouchableOpacity onPressIn={triggerRecord} onPressOut={triggerRecord}>
-        <Lottie
-          ref={lottieRef}
-          style={{ width: 200, height: 200 }}
-          source={require('./src/lottie/record.json')}
-          loop
-        />
-      </TouchableOpacity>
+      <View style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: 'red' }}>
+        <RecordButton />
+      </View>
     </SafeAreaView>
   );
 }
