@@ -3,6 +3,7 @@ import { TouchableOpacity } from 'react-native';
 import { DTORecordButtonProps, DTORecordButtonRef } from '../types';
 import Lottie from 'lottie-react-native';
 import RNAudioRecordPlayer from 'react-native-audio-recorder-player';
+import { PermissionsManager } from '../functions/permissionManager';
 
 let audioRecord: RNAudioRecordPlayer;
 
@@ -21,12 +22,22 @@ export const RecordButton = forwardRef<DTORecordButtonProps, DTORecordButtonRef>
     const fncTriggerRecord = async () => {
         if (lottieRef?.current) {
             if (record) {
-                lottieRef.current.play();
-                await audioRecord.startRecorder();
+                const checkMic = await PermissionsManager.checkMicrophone();
+                if (checkMic) {
+                    lottieRef.current.play();
+                    await audioRecord.startRecorder();
+                    audioRecord.addRecordBackListener((e) => {
+                        return;
+                      });
+                }
+                else {
+                    triggerRecord();
+                }
             }
             else {
                 lottieRef.current.reset();
                 var result = await audioRecord.stopRecorder();
+                audioRecord.removeRecordBackListener();
                 console.log(result);
             }
         }
@@ -35,7 +46,7 @@ export const RecordButton = forwardRef<DTORecordButtonProps, DTORecordButtonRef>
     const lottieRef = useRef<Lottie>(null);
 
     return (
-        <TouchableOpacity onPressIn={triggerRecord} onPressOut={triggerRecord} style={{ backgroundColor: 'blue' }}>
+        <TouchableOpacity onPressIn={triggerRecord} onPressOut={triggerRecord} style={{ alignItems: 'center' }}>
             <Lottie
                 ref={lottieRef}
                 style={{ width: 200, height: 200 }}
